@@ -3,22 +3,23 @@
 
 // Функция для вычисления значения кривой в точке x
 double f(double x) {
-  return 2 * pow(x, 3) + pow(x, 2) + 1;
+  double res = 2 * pow(x, 3) + pow(x, 2) + 1;
+  if (res<0) res=0; // отбрасывание отрицательного
+  return res;
 }
 
 // Функция вычисления интеграла методом Симпсона
 double integral(double a, double b, int n) {
-  double h = (b - a) / n;
-  double sum = f(a) + f(b);
+  double h = (b - a) / n;   // шаг1
+  double sum = f(a) + f(b); // сумма концов
 
   for (int i = 1; i < n; i++) {
     double x = a + i * h;
-    if (i % 2 == 0)
+    if (i % 2 == 0) // Сумма чётных индексов
       sum += 2 * f(x);
-    else
+    else            // Сумма нечётных индексов
       sum += 4 * f(x);
-  }
-  return sum * h / 3;
+  } return sum * h / 3;
 }
 
 // Процедура для оценки погрешности методом Рунге
@@ -32,81 +33,73 @@ void clear_buffer() {
   while (getchar() != '\n');
 }
 
-static char* m1m = "\nМеню:\n1. Ввести пределы интегрирования (a, b)";
-static char* m1r = "Введите пределы интегрирования (a b): ";
-static char* m1e = "Ошибка ввода! предел a должен быть меньше b.\n";
-static char* m2m = "\n2. Ввести количество разбиений n";
-static char* m2r = "Введите количество разбиений n: ";
-static char* m2e = "Ошибка ввода! n должно быть положительным числом.\n";
-static char* m3t = "\n3. Вычислить интеграл";
-static char* m3f = "\n3. [Недоступно - введите данные]";
-static char* m3e = "Сначала введите данные!\n";
-static char* m4t = "\n4. Оценить погрешность";
-static char* m4f = "\n4. [Недоступно - введите данные]";
-static char* m5m = "\n5. Выход";
-static char* m5r = "Выход...\n";
-static char* ms  = "\nВыберите опцию: ";
-static char* moe = "Неверный ввод! Выберите пункт от 1 до 5.\n";
-
 int main() {
   double a = 0, b = 0, result, error; int n = 0, choice;
-  int limits_set = 0, n_set = 0, integral_set = 0, error_set = 0;
+  int ls = 0, ns = 0, is = 0, es = 0, x;
   do {
-    printf(m1m);
-    if (limits_set) printf(" (%f, %f)", a, b);
-    printf(m2m);
-    if (n_set) printf(" (%d)", n);
-    if (limits_set && n_set) {
-      printf(m3t);
-      if (integral_set) printf(" (%.6f)", result);
-      printf(m4t);
-      if (error_set) printf(" (%.6f)", error);
-    } else {
-      printf(m3f);
-      printf(m4f);
-    }
-    printf(m5m);
-    printf(ms);
+    printf("\nМеню:");
+    printf("\n1. Ввести пределы (a -> b)");
+    if (ls) printf(" (%f, %f)", a, b);
+
+    printf("\n2. Ввести кол-во разбиений (n)");
+    if (ns) printf(" (%d)", n);
+
+    printf("\n3. Вычислить интеграл");
+    if (is) printf(" (%.6f)", result);
+
+    printf("\n4. Оценить погрешность");
+    if (es) printf(" (%.6f)", error);
+
+    printf("\n5. Выход.");
+    printf("\nВыберите опцию: ");
     scanf("%d", &choice);
 
     switch (choice) {
       case 1:
-        printf(m1r);
-        if (scanf("%lf %lf", &a, &b) == 2 && a < b) {
-          limits_set = 1;
+        printf("\nВведите пределы: ");
+        x = scanf("%lf %lf", &a, &b);
+        if (x == 2 && b>=a) {
+          ls = 1;
         } else {
-          printf(m1e);
+          ls = 0;
+          printf("Ошибка ввода! b должно быть >=a\n");
           clear_buffer();
-        } break;
+        }; break;
 
       case 2:
-        printf(m2r);
-        if (scanf("%d", &n) == 1 && n > 0) {
-          n_set = 1;
+        printf("\nВведите кол-во разбиений: ");
+        x = scanf("%d", &n);
+        if (x == 1 && n > 0 && n % 2 == 0) {
+          ns = 1;
         } else {
-          printf(m2e);
+          ns = 0;
+          printf("Ошибка ввода! n должно быть >0 и чётным\n");
           clear_buffer();
-        } break;
+        }; break;
 
       case 3:
-        if (limits_set && n_set) {
+        if (ls && ns) {
           result = integral(a, b, n);
-          integral_set = 1;
-        } else printf(m3e); break;
+          is = 1;
+        } else printf("Сначала Введите данные!");
+        break;
 
       case 4:
-        if (limits_set && n_set) {
+        if (ls && ns) {
           estimate_error(a, b, n, &error);
-          error_set = 1;
+          es = 1;
           n *= 2; // Увеличиваем n для следующего вычисления
-        } else printf(m3e); break;
+        } else printf("Сначала Введите данные!");
+        break;
 
       case 5:
-        printf(m5r); break;
+        printf("Выход...\n");
+        break;
 
       default:
-        printf(moe);
+        printf("Неверный ввод! Выберите пункт от 1 до 5.\n");
         clear_buffer();
+        break;
     }
   } while (choice != 5);
   return 0;
