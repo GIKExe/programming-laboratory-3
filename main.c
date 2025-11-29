@@ -1,15 +1,6 @@
-#include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-
-// Функция для очистки экрана
-void clear(void) {
-#ifdef _WIN32
-  system("cls");
-#else
-  system("clear");
-#endif
-}
+#include <stdio.h>
 
 // Функция для вычисления значения кривой в точке x
 double f(double x) {
@@ -17,7 +8,7 @@ double f(double x) {
 }
 
 // Функция вычисления интеграла методом Симпсона
-double simpson_integral(double a, double b, int n) {
+double integral(double a, double b, int n) {
   double h = (b - a) / n;
   double sum = f(a) + f(b);
 
@@ -31,11 +22,15 @@ double simpson_integral(double a, double b, int n) {
   return sum * h / 3;
 }
 
-// Процедура для оценки погрешности методом Рунге (передача n по ссылке)
-void estimate_error(double a, double b, int* n, double* error) {
-  double integral_n = simpson_integral(a, b, *n);
-  double integral_2n = simpson_integral(a, b, *n * 2);
+// Процедура для оценки погрешности методом Рунге
+void estimate_error(double a, double b, int n, double* error) {
+  double integral_n = integral(a, b, n);
+  double integral_2n = integral(a, b, n * 2);
   *error = fabs(integral_2n - integral_n) / 15;
+}
+
+void clear_buffer() {
+	while (getchar() != '\n');
 }
 
 int main() {
@@ -44,35 +39,33 @@ int main() {
   int limits_set = 0, n_set = 0, integral_set = 0, error_set = 0;
 
   do {
-    printf("\nМеню:\n");
-    printf("1. Ввести пределы интегрирования (a, b)");
-    limits_set ? printf(" (%f, %f)\n", a, b) : printf("\n");
-    printf("2. Ввести количество разбиений n");
-    n_set ? printf(" (%d)\n", n) : printf("\n");
+		printf("\nМеню:");
+		printf("\n1. Ввести пределы интегрирования (a, b)");
+		if (limits_set) printf(" (%f, %f)", a, b);
+    printf("\n2. Ввести количество разбиений n");
+    if (n_set) printf(" (%d)", n);
     if (limits_set && n_set) {
-      printf("3. Вычислить интеграл");
-      integral_set ? printf(" (%.6f)\n", result) : printf("\n");
-      printf("4. Оценить погрешность");
-      error_set ? printf(" (%.6f)\n", error) : printf("\n");
-      printf("5. Выход\n");
+      printf("\n3. Вычислить интеграл");
+      if (integral_set) printf(" (%.6f)", result);
+      printf("\n4. Оценить погрешность");
+      if (error_set) printf(" (%.6f)", error);
     } else {
-      printf("3. [Недоступно - введите данные]\n");
-      printf("4. [Недоступно - введите данные]\n");
-      printf("5. Выход\n");
+      printf("\n3. [Недоступно - введите данные]");
+      printf("\n4. [Недоступно - введите данные]");
     }
-    printf("Выберите опцию: ");
+		printf("\n5. Выход");
+		printf("\nВыберите опцию: ");
     scanf("%d", &choice);
-    clear();
+    system("cls");
 
     switch (choice) {
       case 1:
         printf("Введите пределы интегрирования (a b): ");
         if (scanf("%lf %lf", &a, &b) == 2) {
           limits_set = 1;
-          // printf("Пределы установлены: a=%.2f, b=%.2f\n", a, b);
         } else {
           printf("Ошибка ввода!\n");
-          while (getchar() != '\n'); // Очистка буфера
+          clear_buffer();
         }
         break;
 
@@ -80,17 +73,15 @@ int main() {
         printf("Введите количество разбиений n: ");
         if (scanf("%d", &n) == 1 && n > 0) {
           n_set = 1;
-          // printf("Количество разбиений установлено: n=%d\n", n);
         } else {
           printf("Ошибка ввода! n должно быть положительным числом.\n");
-          while (getchar() != '\n'); // Очистка буфера
+          clear_buffer();
         }
         break;
 
       case 3:
         if (limits_set && n_set) {
-          result = simpson_integral(a, b, n);
-          // printf("Результат интегрирования: %.6f\n", result);
+          result = integral(a, b, n);
           integral_set = 1;
         } else printf("Сначала введите данные!\n");
 
@@ -98,9 +89,7 @@ int main() {
 
       case 4:
         if (limits_set && n_set) {
-          estimate_error(a, b, &n, &error);
-          // printf("Оценка погрешности: %.6f\n", error);
-          // printf("Рекомендуемое количество разбиений: %d\n", n * 2);
+          estimate_error(a, b, n, &error);
           error_set = 1;
           n *= 2; // Увеличиваем n для следующего вычисления
         } else printf("Сначала введите данные!\n");
