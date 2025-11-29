@@ -70,7 +70,7 @@ int main() {
     printf(m5);
     printf(ms);
     scanf("%d", &choice);
-    system("cls");
+    // system("cls");
 
     switch (choice) {
       case 1:
