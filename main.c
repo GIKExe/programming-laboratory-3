@@ -33,7 +33,6 @@ void clear_buffer() {
   while (getchar() != '\n');
 }
 
-
 static char* m1  = "\nМеню:\n1. Ввести пределы интегрирования (a, b)";
 static char* m1r = "Введите пределы интегрирования (a b): ";
 static char* m1e = "Ошибка ввода!\n";

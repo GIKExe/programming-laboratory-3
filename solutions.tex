@@ -45,7 +45,6 @@ void clear_buffer() {
   while (getchar() != '\n');
 }
 
-
 static char* m1  = "\nМеню:\n1. Ввести пределы интегрирования (a, b)";
 static char* m1r = "Введите пределы интегрирования (a b): ";
 static char* m1e = "Ошибка ввода!\n";
@@ -64,10 +63,8 @@ static char* ms  = "\nВыберите опцию: ";
 static char* moe = "Неверный ввод! Выберите пункт от 1 до 5.\n";
 
 int main() {
-  double a = 0, b = 0, result, error;
-  int n = 0, choice;
+  double a = 0, b = 0, result, error; int n = 0, choice;
   int limits_set = 0, n_set = 0, integral_set = 0, error_set = 0;
-
   do {
     printf(m1);
     if (limits_set) printf(" (%f, %f)", a, b);
@@ -95,8 +92,7 @@ int main() {
         } else {
           printf(m1e);
           clear_buffer();
-        }
-        break;
+        } break;
 
       case 2:
         printf(m2r);
@@ -105,34 +101,29 @@ int main() {
         } else {
           printf(m2e);
           clear_buffer();
-        }
-        break;
+        } break;
 
       case 3:
         if (limits_set && n_set) {
           result = integral(a, b, n);
           integral_set = 1;
-        } else printf(m3e);
-        break;
+        } else printf(m3e); break;
 
       case 4:
         if (limits_set && n_set) {
           estimate_error(a, b, n, &error);
           error_set = 1;
           n *= 2; // Увеличиваем n для следующего вычисления
-        } else printf(m3e);
-        break;
+        } else printf(m3e); break;
 
       case 5:
-        printf(m5r);
-        break;
+        printf(m5r); break;
 
       default:
         printf(moe);
         clear_buffer();
     }
   } while (choice != 5);
-
   return 0;
 }
 \end{minted}
