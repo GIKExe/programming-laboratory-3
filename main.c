@@ -1,5 +1,4 @@
 #include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 // Функция для вычисления значения кривой в точке x
@@ -44,7 +43,6 @@ static char* m3f = "\n3. [Недоступно - введите данные]";
 static char* m3e = "Сначала введите данные!\n";
 static char* m4t = "\n4. Оценить погрешность";
 static char* m4f = "\n4. [Недоступно - введите данные]";
-// static char* m4e = "Сначала введите данные!\n";
 static char* m5  = "\n5. Выход";
 static char* m5r = "Выход...\n";
 static char* ms  = "\nВыберите опцию: ";
@@ -70,7 +68,6 @@ int main() {
     printf(m5);
     printf(ms);
     scanf("%d", &choice);
-    // system("cls");
 
     switch (choice) {
       case 1:
