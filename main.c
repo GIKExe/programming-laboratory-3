@@ -34,8 +34,8 @@ void clear_buffer() {
 }
 
 int main() {
-  double a = 0, b = 0, result, error; int n = 0, choice;
-  int ls = 0, ns = 0, is = 0, es = 0, x;
+  double a, b, result, error;
+  int ls = 0, ns = 0, is = 0, es = 0, x, n, choice;
   do {
     printf("\nМеню:");
     printf("\n1. Ввести пределы (a -> b)");
@@ -81,7 +81,7 @@ int main() {
         if (ls && ns) {
           result = integral(a, b, n);
           is = 1;
-        } else printf("Сначала Введите данные!");
+        } else printf("\nСначала Введите данные!\n");
         break;
 
       case 4:
@@ -89,17 +89,16 @@ int main() {
           estimate_error(a, b, n, &error);
           es = 1;
           n *= 2; // Увеличиваем n для следующего вычисления
-        } else printf("Сначала Введите данные!");
+        } else printf("\nСначала Введите данные!\n");
         break;
 
       case 5:
-        printf("Выход...\n");
+        printf("\nВыход...\n");
         break;
 
       default:
-        printf("Неверный ввод! Выберите пункт от 1 до 5.\n");
+        printf("\nНеверный ввод! Выберите пункт от 1 до 5.\n");
         clear_buffer();
-        break;
     }
   } while (choice != 5);
   return 0;
