@@ -15,10 +15,8 @@ double integral(double a, double b, int n) {
 
   for (int i = 1; i < n; i++) {
     double x = a + i * h;
-    if (i % 2 == 0) // Сумма чётных индексов
-      sum += 2 * f(x);
-    else            // Сумма нечётных индексов
-      sum += 4 * f(x);
+    if (i % 2 == 0) sum += 2 * f(x);
+    else sum += 4 * f(x);
   } return sum * h / 3;
 }
 
@@ -50,30 +48,30 @@ int main() {
     printf("\n4. Оценить погрешность");
     if (es) printf(" (%.6f)", error);
 
-    printf("\n5. Выход.");
+    printf("\n5. Выход");
     printf("\nВыберите опцию: ");
     scanf("%d", &choice);
 
     switch (choice) {
       case 1:
         printf("\nВведите пределы: ");
-        x = scanf("%lf %lf", &a, &b);
-        if (x == 2 && b>=a) {
-          ls = 1;
+        ls = 0;
+        if (scanf("%lf %lf", &a, &b) == 2) {
+          if (b >= a) ls = 1;
+          else printf("Неверный ввод: b должно быть >= a\n");
         } else {
-          ls = 0;
-          printf("Ошибка ввода! b должно быть >=a\n");
+          printf("Ошибка ввода\n");
           clear_buffer();
         }; break;
 
       case 2:
         printf("\nВведите кол-во разбиений: ");
-        x = scanf("%d", &n);
-        if (x == 1 && n > 0 && n % 2 == 0) {
-          ns = 1;
+        ns = 0;
+        if (scanf("%d", &n) == 1) {
+          if (n > 0 && n % 2 == 0) ns = 1;
+          else printf("Неверный ввод: n должно быть >0 и чётным\n");
         } else {
-          ns = 0;
-          printf("Ошибка ввода! n должно быть >0 и чётным\n");
+          printf("Ошибка ввода\n");
           clear_buffer();
         }; break;
 
@@ -97,7 +95,7 @@ int main() {
         break;
 
       default:
-        printf("\nНеверный ввод! Выберите пункт от 1 до 5.\n");
+        printf("\nНеверный ввод! Выберите пункт от 1 до 5\n");
         clear_buffer();
     }
   } while (choice != 5);
