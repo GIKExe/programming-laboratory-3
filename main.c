@@ -10,7 +10,7 @@ double f(double x) {
 
 // Функция вычисления интеграла методом Симпсона
 double integral(double a, double b, int n) {
-  double h = (b - a) / n;   // шаг1
+  double h = (b - a) / n;   // шаг
   double sum = f(a) + f(b); // сумма концов
 
   for (int i = 1; i < n; i++) {
@@ -24,7 +24,7 @@ double integral(double a, double b, int n) {
 void estimate_error(double a, double b, int n, double* error) {
   double integral_n = integral(a, b, n);
   double integral_2n = integral(a, b, n * 2);
-  *error = fabs(integral_2n - integral_n) / 15;
+  *error = fabs(integral_2n - integral_n);
 }
 
 void clear_buffer() {
@@ -46,7 +46,10 @@ int main() {
     if (is) printf(" (%.6f)", result);
 
     printf("\n4. Оценить погрешность");
-    if (es) printf(" (%.6f)", error);
+    if (es) {
+      double procent = (1 - fabs(result - error) / result) * 100;
+      printf(" (%.6f, %.6f%%)", error, procent);
+    }
 
     printf("\n5. Выход");
     printf("\nВыберите опцию: ");
@@ -57,8 +60,9 @@ int main() {
         printf("\nВведите пределы: ");
         ls = 0;
         if (scanf("%lf %lf", &a, &b) == 2) {
+          if (a < 0) {a = 0; printf("предел А был изменён на 0\n");}
           if (b >= a) ls = 1;
-          else printf("Неверный ввод: b должно быть >= a\n");
+          else printf("Неверный ввод: B должно быть >= A\n");
         } else {
           printf("Ошибка ввода\n");
           clear_buffer();
